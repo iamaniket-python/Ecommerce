@@ -47,6 +47,7 @@ export const fetchCurrentUser = createAsyncThunk(
 const initialState = {
   user: null,
   isAuthenticated: false,
+  authChecked: false,
   loading: false,
   error: null,
 };

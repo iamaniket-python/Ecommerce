@@ -1,6 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/slices/authSlice";
+import LocationBar from "../LocationBar/LocationBar";
 import "../../css/Navbar.css";
 
 function Navbar() {
@@ -20,6 +21,8 @@ function Navbar() {
         <Link to="/" className="navbar-logo">
           MyShop
         </Link>
+
+        <LocationBar />
 
         <div className="navbar-links">
           <Link to="/">Home</Link>

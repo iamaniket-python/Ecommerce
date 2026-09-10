@@ -7,14 +7,25 @@ import Cart from "./pages/Cart/Cart";
 import ProductDetail from "./pages/ProductDetail/ProductDetail";
 import Checkout from "./pages/Checkout/Checkout";
 import OrderDetail from "./pages/OrderDetail/OrderDetail";
+import Footer from "./components/Footer/Footer";
 import Login from "./pages/Authentication/Login";
 import Register from "./pages/Authentication/Register";
 import Dashboard from "./pages/Seller/Dashboard";
 import MyProducts from "./pages/Seller/MyProducts";
 import ProductForm from "./pages/Seller/ProductForm";
 import SellerRoute from "./routes/SellerRoute";
+import { fetchCurrentUser } from "./redux/slices/authSlice";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      dispatch(fetchCurrentUser());
+    }
+  }, [dispatch]);
+
   return (
     <>
       <Navbar />
@@ -32,6 +43,7 @@ function App() {
         <Route path="/seller/products/add" element={<SellerRoute><ProductForm /></SellerRoute>} />
         <Route path="/seller/products/edit/:id" element={<SellerRoute><ProductForm /></SellerRoute>} />
       </Routes>
+      <Footer />
     </>
   );
 }

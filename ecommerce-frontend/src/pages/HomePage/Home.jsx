@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, fetchCategories } from "../../redux/slices/productsSlice";
 import ProductCard from "../../components/ProductCard/ProductCard";
+import HeroBanner from "../../components/HeroBanner/HeroBanner";
+import CategoryIcons from "../../components/CategoryIcons/CategoryIcons";
 import "../../css/Home.css";
 
 function Home() {
@@ -21,19 +23,22 @@ function Home() {
 
     const timer = setTimeout(() => {
       dispatch(fetchProducts(params));
-    }, 400); // debounce search
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [dispatch, search, selectedCategory]);
 
   return (
     <div className="home-page">
-      <div className="hero-banner">
-        <h1>Discover Great Products</h1>
-        <p>Shop from trusted sellers, best prices guaranteed</p>
-      </div>
+      <HeroBanner />
 
       <div className="container">
+        <CategoryIcons
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onSelect={setSelectedCategory}
+        />
+
         <div className="filters-bar">
           <input
             type="text"

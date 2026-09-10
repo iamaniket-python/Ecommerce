@@ -1,0 +1,25 @@
+.location-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #444;
+  background: #f3f4f6;
+  padding: 7px 14px;
+  border-radius: 20px;
+  width: fit-content;
+}
+
+.location-bar svg {
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+.location-bar.location-error {
+  color: #999;
+}
+
+.location-bar.location-error svg {
+  color: #999;
+}

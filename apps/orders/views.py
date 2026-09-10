@@ -18,13 +18,22 @@ class OrderListCreateView(generics.ListCreateAPIView):
         if not cart or not cart.items.exists():
             return Response({'success': False, 'error': 'Cart is empty.'}, status=400)
 
-        shipping_address = request.data.get('shipping_address')
-        if not shipping_address:
-            return Response({'success': False, 'error': 'Shipping address is required.'}, status=400)
+        required_fields = ['full_name', 'email', 'phone', 'address_line', 'city', 'state', 'pincode']
+        missing = [f for f in required_fields if not request.data.get(f)]
+        if missing:
+            return Response({'success': False, 'error': f'Missing fields: {", ".join(missing)}'}, status=400)
 
         with transaction.atomic():
             order = Order.objects.create(
-                user=request.user, total_amount=cart.total_price, shipping_address=shipping_address
+                user=request.user,
+                total_amount=cart.total_price,
+                full_name=request.data.get('full_name'),
+                email=request.data.get('email'),
+                phone=request.data.get('phone'),
+                address_line=request.data.get('address_line'),
+                city=request.data.get('city'),
+                state=request.data.get('state'),
+                pincode=request.data.get('pincode'),
             )
             for item in cart.items.select_related('product'):
                 if item.quantity > item.product.stock:

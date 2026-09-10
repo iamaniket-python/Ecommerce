@@ -1,0 +1,70 @@
+.category-icons-section {
+  padding: 30px 0 10px;
+}
+
+.category-icons-section h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 18px;
+}
+
+.category-icons-row {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.category-icons-row::-webkit-scrollbar {
+  height: 5px;
+}
+
+.category-icons-row::-webkit-scrollbar-thumb {
+  background: #ddd;
+  border-radius: 10px;
+}
+
+.category-icon-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  min-width: 70px;
+}
+
+.category-icon-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.category-icon-item:hover .category-icon-circle {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+}
+
+.category-icon-item.active .category-icon-circle {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: #764ba2;
+}
+
+.category-icon-item span {
+  font-size: 12px;
+  font-weight: 600;
+  color: #555;
+  text-align: center;
+}
+
+.category-icon-item.active span {
+  color: #667eea;
+}

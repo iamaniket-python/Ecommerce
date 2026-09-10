@@ -12,28 +12,40 @@ function Checkout() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [address, setAddress] = useState(user?.address || "");
+  const [formData, setFormData] = useState({
+    full_name: user?.username || "",
+    email: user?.email || "",
+    phone: user?.phone || "",
+    address_line: user?.address || "",
+    city: "",
+    state: "",
+    pincode: "",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handlePlaceOrder = async () => {
     setError("");
-    if (!address.trim()) {
-      setError("Please enter a shipping address.");
+
+    const required = ["full_name", "email", "phone", "address_line", "city", "state", "pincode"];
+    const missing = required.filter((f) => !formData[f].trim());
+    if (missing.length > 0) {
+      setError("Please fill in all the fields.");
       return;
     }
 
     setLoading(true);
     try {
-      // Step 1: Create order in backend
-      const orderRes = await createOrder({ shipping_address: address });
+      const orderRes = await createOrder(formData);
       const order = orderRes.data.data;
 
-      // Step 2: Create Razorpay payment order
       const paymentRes = await createPayment(order.id);
       const paymentData = paymentRes.data.data;
 
-      // Step 3: Open Razorpay Checkout
       const options = {
         key: paymentData.key,
         amount: paymentData.amount,
@@ -55,13 +67,11 @@ function Checkout() {
           }
         },
         prefill: {
-          name: user?.username,
-          email: user?.email,
-          contact: user?.phone,
+          name: formData.full_name,
+          email: formData.email,
+          contact: formData.phone,
         },
-        theme: {
-          color: "#667eea",
-        },
+        theme: { color: "#667eea" },
         modal: {
           ondismiss: function () {
             setLoading(false);
@@ -88,14 +98,45 @@ function Checkout() {
 
       <div className="checkout-layout">
         <div className="checkout-address">
-          <h3>Shipping Address</h3>
-          <textarea
-            rows="4"
-            placeholder="Enter your full delivery address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
+          <h3>Contact & Shipping Details</h3>
+
           {error && <p className="error-text">{error}</p>}
+
+          <div className="form-group">
+            <label>Full Name</label>
+            <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Email</label>
+              <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label>Mobile Number</label>
+              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Address</label>
+            <textarea rows="3" name="address_line" placeholder="House no, street, locality" value={formData.address_line} onChange={handleChange} required />
+          </div>
+
+          <div className="form-row three-col">
+            <div className="form-group">
+              <label>City</label>
+              <input type="text" name="city" value={formData.city} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label>State</label>
+              <input type="text" name="state" value={formData.state} onChange={handleChange} required />
+            </div>
+            <div className="form-group">
+              <label>Pincode</label>
+              <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} required />
+            </div>
+          </div>
         </div>
 
         <div className="checkout-summary">
